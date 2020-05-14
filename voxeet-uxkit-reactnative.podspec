@@ -11,7 +11,7 @@ Pod::Spec.new do |spec|
   spec.homepage = "https://voxeet.com"
   spec.platform = :ios, "9.0"
   spec.swift_version = "5.2.2"
-  spec.source = { :git => "https://github.com/voxeet/voxeet-uxkit-reactnative.git", :tag => "v#{spec.version}" }
+  spec.source = { :git => "https://github.com/AlexanderPodlesniyQs/voxeet-uxkit-reactnative.git", :tag => "v#{spec.version}" }
   spec.source_files  = "ios/**/*.{h,m}"
   spec.framework = "UIKit"
   spec.dependency "React"

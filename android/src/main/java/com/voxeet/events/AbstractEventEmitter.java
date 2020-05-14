@@ -40,7 +40,7 @@ public class AbstractEventEmitter {
         callback.transform(map, object);
 
         WritableMap event = new WritableNativeMap();
-        event.putMap("event", map);
+        event.putMap("event", map.copy());
         event.putString("name", callback.name());
 
         context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)

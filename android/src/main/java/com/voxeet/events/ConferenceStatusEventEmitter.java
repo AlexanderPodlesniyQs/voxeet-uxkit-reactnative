@@ -23,6 +23,8 @@ import com.voxeet.sdk.json.RecordingStatusUpdatedEvent;
 import com.voxeet.sdk.json.StartVideoResponse;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class ConferenceStatusEventEmitter extends AbstractEventEmitter {
 
@@ -102,66 +104,82 @@ public class ConferenceStatusEventEmitter extends AbstractEventEmitter {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ConferenceStatusUpdatedEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(StartScreenShareAnswerEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(StopScreenShareAnswerEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(PermissionRefusedEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(StartVideoResponse event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(StopVideoAnswerEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(SdkLogoutSuccessEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(SdkLogoutErrorEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(GetConferenceStatusErrorEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CameraSwitchSuccessEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CameraSwitchErrorEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(QualityIndicators event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(IncomingCallEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(RecordingStatusUpdatedEvent event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ConferenceDestroyedPush event) {
         emit(event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ConferenceEnded event) {
         emit(event);
     }

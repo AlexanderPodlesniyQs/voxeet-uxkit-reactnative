@@ -1,7 +1,8 @@
 import { DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import ConferenceUser from './types/ConferenceUser';
-import CreateOptions from './types/CreateConference';
-import JoinOptions from './types/JoinConference';
+import CreateOptions, { CreateConferenceResult } from './types/CreateConference';
+import JoinOptions, { JoinConferenceResult } from './types/JoinConference';
+
 const { RNVoxeetConferencekit } = NativeModules;
 
 export interface RefreshCallback {
@@ -13,14 +14,14 @@ export interface TokenRefreshCallback {
 };
 
 export default class _VoxeetSDK {
-  refreshAccessTokenCallback: RefreshCallback|null = null;
+  public refreshAccessTokenCallback: RefreshCallback|null = null;
 
 
-  initialize(consumerKey: string, consumerSecret: string): Promise<any> {
+  public initialize(consumerKey: string, consumerSecret: string): Promise<boolean> {
       return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret);
   }
 
-  initializeToken(accessToken: string|undefined, refreshToken: TokenRefreshCallback) {
+  public initializeToken(accessToken: string|undefined, refreshToken: TokenRefreshCallback): Promise<boolean> {
     if(!this.refreshAccessTokenCallback) {
       this.refreshAccessTokenCallback = () => {
         refreshToken()
@@ -38,53 +39,53 @@ export default class _VoxeetSDK {
     return RNVoxeetConferencekit.initializeToken(accessToken);
   }
 
-  connect(userInfo: ConferenceUser): Promise<any> {
+  public connect(userInfo: ConferenceUser): Promise<boolean> {
     return RNVoxeetConferencekit.connect(userInfo);
   }
 
-  disconnect(): Promise<any> {
+  public disconnect(): Promise<boolean> {
     return RNVoxeetConferencekit.disconnect();
   }
 
-  create(options: CreateOptions): Promise<any> {
+  public create(options: CreateOptions): Promise<CreateConferenceResult> {
     return RNVoxeetConferencekit.create(options);
   }
 
-  join(conferenceId: string, options: JoinOptions = {}): Promise<any> {
+  public join(conferenceId: string, options: JoinOptions = {}): Promise<JoinConferenceResult> {
     return RNVoxeetConferencekit.join(conferenceId, options);
   }
 
-  leave(): Promise<any> {
+  public leave(): Promise<boolean> {
     return RNVoxeetConferencekit.leave();
   }
 
-  invite(conferenceId: string, participants: ConferenceUser[]): Promise<any> {
+  public invite(conferenceId: string, participants: ConferenceUser[]): Promise<boolean> {
     return RNVoxeetConferencekit.invite(conferenceId, participants);
   }
 
-  sendBroadcastMessage(message: string): Promise<any> {
+  public sendBroadcastMessage(message: string): Promise<boolean> {
     return RNVoxeetConferencekit.sendBroadcastMessage(message);
   }
 
-  isTelecomMode(): Promise<boolean> {
+  public isTelecomMode(): Promise<boolean> {
     return RNVoxeetConferencekit.isTelecomMode();
   }
 
-  isAudio3DEnabled(): Promise<boolean> {
+  public isAudio3DEnabled(): Promise<boolean> {
     return RNVoxeetConferencekit.isAudio3DEnabled();
   }
 
-  appearMaximized(enable: boolean): boolean {
+  public appearMaximized(enable: boolean): boolean {
     RNVoxeetConferencekit.appearMaximized(enable);
     return true;
   }
 
-  defaultBuiltInSpeaker(enable: boolean): boolean {
+  public defaultBuiltInSpeaker(enable: boolean): boolean {
     RNVoxeetConferencekit.defaultBuiltInSpeaker(enable);
     return true;
   }
 
-  defaultVideo(enable: boolean): boolean {
+  public defaultVideo(enable: boolean): boolean {
     RNVoxeetConferencekit.defaultVideo(enable);
     return true;
   }
@@ -92,18 +93,18 @@ export default class _VoxeetSDK {
   /*
     *  Android methods
     */
-  screenAutoLock(activate: boolean) {
+  public screenAutoLock(activate: boolean) {
     if(Platform.OS == "android") {
       RNVoxeetConferencekit.screenAutoLock(activate);
     }
   }
 
   //deprecated
-  isUserLoggedIn(): Promise<boolean> {
+  public isUserLoggedIn(): Promise<boolean> {
     return RNVoxeetConferencekit.isUserLoggedIn();
   }
 
-  checkForAwaitingConference(): Promise<any> {
+  public checkForAwaitingConference(): Promise<any> {
     if(Platform.OS != "android") return new Promise(r => r());
 
     return RNVoxeetConferencekit.checkForAwaitingConference();
@@ -113,19 +114,19 @@ export default class _VoxeetSDK {
     *  Deprecated methods
     */
 
-  startConference(conferenceId: string, participants: Array<ConferenceUser>): Promise<any> {
+   public startConference(conferenceId: string, participants: Array<ConferenceUser>): Promise<any> {
     return RNVoxeetConferencekit.startConference(conferenceId, participants);
   }
 
-  stopConference(): Promise<any> {
+  public stopConference(): Promise<any> {
     return RNVoxeetConferencekit.leave();
   }
 
-  openSession(userInfo: ConferenceUser): Promise<any> {
+  public openSession(userInfo: ConferenceUser): Promise<any> {
     return RNVoxeetConferencekit.connect(userInfo);
   }
 
-  closeSession(): Promise<any> {
+  public closeSession(): Promise<any> {
     return RNVoxeetConferencekit.disconnect();
   }
 }

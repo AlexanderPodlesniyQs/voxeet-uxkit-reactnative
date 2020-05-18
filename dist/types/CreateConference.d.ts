@@ -22,7 +22,7 @@ export default interface CreateOptions {
     params?: CreateParameters;
 }
 export interface CreateConferenceResult {
-    readonly conferenceId: String;
-    readonly conferenceAlias: String;
+    readonly conferenceId: string;
+    readonly conferenceAlias: string;
     readonly isNew: boolean;
 }

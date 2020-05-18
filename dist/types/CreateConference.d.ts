@@ -21,3 +21,8 @@ export default interface CreateOptions {
     alias?: string;
     params?: CreateParameters;
 }
+export interface CreateConferenceResult {
+    readonly conferenceId: String;
+    readonly conferenceAlias: String;
+    readonly isNew: boolean;
+}

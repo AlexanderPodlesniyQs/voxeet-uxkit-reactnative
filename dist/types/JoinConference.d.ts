@@ -8,3 +8,14 @@ export interface JoinUserInfo {
 export default interface JoinOptions {
     user?: JoinUserInfo;
 }
+export interface JoinConferenceUser {
+    conferenceStatus: string;
+    externalId: string | undefined;
+    name: string;
+    userId: string | undefined;
+}
+export interface JoinConferenceResult {
+    conferenceAlias: string;
+    conferenceId: string;
+    conferenceUsers: JoinConferenceUser[];
+}

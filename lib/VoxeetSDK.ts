@@ -13,19 +13,15 @@ export interface TokenRefreshCallback {
   (): Promise<string>
 };
 
-export interface InitializeOptions {
-  waitingForParticipantsTimeout: number;
-}
-
 export default class _VoxeetSDK {
   public refreshAccessTokenCallback: RefreshCallback|null = null;
 
 
-  public initialize(consumerKey: string, consumerSecret: string, options?: InitializeOptions): Promise<boolean> {
-      return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret, options);
+  public initialize(consumerKey: string, consumerSecret: string): Promise<boolean> {
+      return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret);
   }
 
-  public initializeToken(accessToken: string|undefined, refreshToken: TokenRefreshCallback, options?: InitializeOptions): Promise<boolean> {
+  public initializeToken(accessToken: string|undefined, refreshToken: TokenRefreshCallback): Promise<boolean> {
     if(!this.refreshAccessTokenCallback) {
       this.refreshAccessTokenCallback = () => {
         refreshToken()
@@ -40,7 +36,7 @@ export default class _VoxeetSDK {
       });
     }
 
-    return RNVoxeetConferencekit.initializeToken(accessToken, options);
+    return RNVoxeetConferencekit.initializeToken(accessToken);
   }
 
   public connect(userInfo: ConferenceUser): Promise<boolean> {
@@ -92,6 +88,14 @@ export default class _VoxeetSDK {
   public defaultVideo(enable: boolean): boolean {
     RNVoxeetConferencekit.defaultVideo(enable);
     return true;
+  }
+
+  public get waitingForParticipantsTimeout(): number {
+    return RNVoxeetConferencekit.waitingForParticipantsTimeout();
+  }
+
+  public set waitingForParticipantsTimeout(timeout: number) {
+    RNVoxeetConferencekit.setWaitingForParticipantsTimeout(timeout);
   }
 
   /*

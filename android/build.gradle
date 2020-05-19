@@ -1,18 +1,24 @@
 buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+    if (project == rootProject) {
+        repositories {
+            google()
+            jcenter()
+        }
+        dependencies {
+            classpath 'com.android.tools.build:gradle:3.3.0'
+            classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+            classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6'
+            classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6'
+        }
     }
 }
 
 apply plugin: 'com.android.library'
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
 
 def ext = rootProject.ext
 def _compile = ext.has("compileSdkVersion") ? ext.compileSdkVersion : 28
@@ -44,20 +50,23 @@ android {
 
 repositories {
     google()
-    mavenCentral()
+	maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url "$rootDir/../node_modules/react-native/android"
+    }
     jcenter()
 }
 
 dependencies {
-    implementation 'com.facebook.react:react-native:+'
+    implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "androidx.annotation:annotation:1.1.0"
 
     //add by default the optional firebase dependency
-    compile ('com.voxeet.sdk:uxkit-firebase:2.3.0')
+    implementation ('com.voxeet.sdk:uxkit-firebase:2.3.0')
 
     //use the latest toolkit
-    compile ('com.voxeet.sdk:uxkit:2.3.0') {
+    implementation ('com.voxeet.sdk:uxkit:2.3.0') {
         transitive = true
     }
 }

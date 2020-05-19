@@ -7,13 +7,10 @@ export interface RefreshCallback {
 export interface TokenRefreshCallback {
     (): Promise<string>;
 }
-export interface InitializeOptions {
-    waitingForParticipantsTimeout: number;
-}
 export default class _VoxeetSDK {
     refreshAccessTokenCallback: RefreshCallback | null;
-    initialize(consumerKey: string, consumerSecret: string, options?: InitializeOptions): Promise<boolean>;
-    initializeToken(accessToken: string | undefined, refreshToken: TokenRefreshCallback, options?: InitializeOptions): Promise<boolean>;
+    initialize(consumerKey: string, consumerSecret: string): Promise<boolean>;
+    initializeToken(accessToken: string | undefined, refreshToken: TokenRefreshCallback): Promise<boolean>;
     connect(userInfo: ConferenceUser): Promise<boolean>;
     disconnect(): Promise<boolean>;
     create(options: CreateOptions): Promise<CreateConferenceResult>;
@@ -26,6 +23,7 @@ export default class _VoxeetSDK {
     appearMaximized(enable: boolean): boolean;
     defaultBuiltInSpeaker(enable: boolean): boolean;
     defaultVideo(enable: boolean): boolean;
+    waitingForParticipantsTimeout: number;
     screenAutoLock(activate: boolean): void;
     isUserLoggedIn(): Promise<boolean>;
     checkForAwaitingConference(): Promise<any>;

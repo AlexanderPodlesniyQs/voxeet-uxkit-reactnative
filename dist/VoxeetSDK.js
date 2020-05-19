@@ -6,10 +6,10 @@ var _VoxeetSDK = /** @class */ (function () {
     function _VoxeetSDK() {
         this.refreshAccessTokenCallback = null;
     }
-    _VoxeetSDK.prototype.initialize = function (consumerKey, consumerSecret, options) {
-        return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret, options);
+    _VoxeetSDK.prototype.initialize = function (consumerKey, consumerSecret) {
+        return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret);
     };
-    _VoxeetSDK.prototype.initializeToken = function (accessToken, refreshToken, options) {
+    _VoxeetSDK.prototype.initializeToken = function (accessToken, refreshToken) {
         var _this = this;
         if (!this.refreshAccessTokenCallback) {
             this.refreshAccessTokenCallback = function () {
@@ -24,7 +24,7 @@ var _VoxeetSDK = /** @class */ (function () {
                 _this.refreshAccessTokenCallback && _this.refreshAccessTokenCallback();
             });
         }
-        return RNVoxeetConferencekit.initializeToken(accessToken, options);
+        return RNVoxeetConferencekit.initializeToken(accessToken);
     };
     _VoxeetSDK.prototype.connect = function (userInfo) {
         return RNVoxeetConferencekit.connect(userInfo);
@@ -66,6 +66,16 @@ var _VoxeetSDK = /** @class */ (function () {
         RNVoxeetConferencekit.defaultVideo(enable);
         return true;
     };
+    Object.defineProperty(_VoxeetSDK.prototype, "waitingForParticipantsTimeout", {
+        get: function () {
+            return RNVoxeetConferencekit.waitingForParticipantsTimeout();
+        },
+        set: function (timeout) {
+            RNVoxeetConferencekit.setWaitingForParticipantsTimeout(timeout);
+        },
+        enumerable: true,
+        configurable: true
+    });
     /*
       *  Android methods
       */

@@ -64,7 +64,6 @@ RCT_EXPORT_METHOD(initialize:(NSString *)consumerKey
 }
 
 RCT_EXPORT_METHOD(initializeToken:(NSString *)accessToken
-                  options:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   ejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -72,7 +71,6 @@ RCT_EXPORT_METHOD(initializeToken:(NSString *)accessToken
         VoxeetSDK.shared.notification.push.type = VTNotificationPushTypeCallKit;
         VoxeetSDK.shared.telemetry.platform = VTTelemetryPlatformReactNative;
 
-		// ToDo: use options
         [VoxeetSDK.shared initializeWithAccessToken:accessToken refreshTokenClosure:^(void (^closure)(NSString *)) {
             self.refreshAccessTokenClosure = closure;
             if (self->_hasListeners) {
@@ -281,6 +279,18 @@ RCT_EXPORT_METHOD(defaultVideo:(BOOL)enable)
         [VoxeetSDK.shared.conference setDefaultVideo:enable];
     });
 }
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(waitingForParticipantsTimeout)
+{
+    // ToDo: use value from VoxeetSDK.shared.conference
+    return -1;
+}
+
+RCT_EXPORT_METHOD(setWaitingForParticipantsTimeout:(long)timeout)
+{
+    // ToDo: [VoxeetSDK.shared.conference setWaitingForParticipantsTimeout:timeout];
+}
+
 
 /*
  *  MARK: Oauth2 helpers

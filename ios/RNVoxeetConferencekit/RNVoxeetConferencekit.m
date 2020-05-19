@@ -64,6 +64,7 @@ RCT_EXPORT_METHOD(initialize:(NSString *)consumerKey
 }
 
 RCT_EXPORT_METHOD(initializeToken:(NSString *)accessToken
+                  options:(NSDictionary *)options
                   resolve:(RCTPromiseResolveBlock)resolve
                   ejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -71,6 +72,7 @@ RCT_EXPORT_METHOD(initializeToken:(NSString *)accessToken
         VoxeetSDK.shared.notification.push.type = VTNotificationPushTypeCallKit;
         VoxeetSDK.shared.telemetry.platform = VTTelemetryPlatformReactNative;
 
+		// ToDo: use options
         [VoxeetSDK.shared initializeWithAccessToken:accessToken refreshTokenClosure:^(void (^closure)(NSString *)) {
             self.refreshAccessTokenClosure = closure;
             if (self->_hasListeners) {
@@ -79,7 +81,7 @@ RCT_EXPORT_METHOD(initializeToken:(NSString *)accessToken
         }];
         [VoxeetUXKit.shared initialize];
 
-        resolve(nil);
+        resolve(@(true));
     });
 }
 

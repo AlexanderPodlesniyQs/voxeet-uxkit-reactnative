@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.facebook.react.BuildConfig;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -101,7 +102,7 @@ public class RNVoxeetConferencekitModule extends ReactContextBaseJavaModule {
 
 
     @ReactMethod
-    public void initializeToken(String accessToken, Promise promise) {
+    public void initializeToken(String accessToken, @Nullable ReadableMap options, @NonNull final Promise promise) {
         Application application = (Application) reactContext.getApplicationContext();
 
         if (null == VoxeetSDK.instance()) {
@@ -119,28 +120,44 @@ public class RNVoxeetConferencekitModule extends ReactContextBaseJavaModule {
                         postRefreshAccessToken();
                     });
 
-            internalInitialize();
+            long waitingForParticipantsTimeout = 30 * 1000; //30s
+
+            if (null != options) {
+                if (options.hasKey("waitingForParticipantsTimeout")) {
+                    waitingForParticipantsTimeout = options.getInt("waitingForParticipantsTimeout");
+                }
+            }
+
+            internalInitialize(waitingForParticipantsTimeout);
         }
         promise.resolve(true);
     }
 
     @ReactMethod
-    public void initialize(String consumerKey, String consumerSecret, Promise promise) {
+    public void initialize(String consumerKey, String consumerSecret, @Nullable ReadableMap options, @NonNull final Promise promise) {
         Application application = (Application) reactContext.getApplicationContext();
 
         if (null == VoxeetSDK.instance()) {
             VoxeetSDK.setApplication(application);
             VoxeetSDK.initialize(consumerKey, consumerSecret);
 
-            internalInitialize();
+            long waitingForParticipantsTimeout = 30 * 1000; //30s
+
+            if (null != options) {
+                if (options.hasKey("waitingForParticipantsTimeout")) {
+                    waitingForParticipantsTimeout = options.getInt("waitingForParticipantsTimeout");
+                }
+            }
+
+            internalInitialize(waitingForParticipantsTimeout);
         }
 
         promise.resolve(true);
     }
 
-    private void internalInitialize() {
+    private void internalInitialize(final long waitingForParticipantsTimeout) {
         Application application = (Application) reactContext.getApplicationContext();
-        VoxeetSDK.conference().ConferenceConfigurations.TelecomWaitingForParticipantTimeout = 30 * 1000; //30s
+        VoxeetSDK.conference().ConferenceConfigurations.TelecomWaitingForParticipantTimeout = waitingForParticipantsTimeout;
 
         //reset the incoming call activity, in case the SDK was no initialized, it would have
         //erased this method call

@@ -13,15 +13,19 @@ export interface TokenRefreshCallback {
   (): Promise<string>
 };
 
+export interface InitializeOptions {
+  waitingForParticipantsTimeout: number;
+}
+
 export default class _VoxeetSDK {
   public refreshAccessTokenCallback: RefreshCallback|null = null;
 
 
-  public initialize(consumerKey: string, consumerSecret: string): Promise<boolean> {
-      return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret);
+  public initialize(consumerKey: string, consumerSecret: string, options?: InitializeOptions): Promise<boolean> {
+      return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret, options);
   }
 
-  public initializeToken(accessToken: string|undefined, refreshToken: TokenRefreshCallback): Promise<boolean> {
+  public initializeToken(accessToken: string|undefined, refreshToken: TokenRefreshCallback, options?: InitializeOptions): Promise<boolean> {
     if(!this.refreshAccessTokenCallback) {
       this.refreshAccessTokenCallback = () => {
         refreshToken()
@@ -36,7 +40,7 @@ export default class _VoxeetSDK {
       });
     }
 
-    return RNVoxeetConferencekit.initializeToken(accessToken);
+    return RNVoxeetConferencekit.initializeToken(accessToken, options);
   }
 
   public connect(userInfo: ConferenceUser): Promise<boolean> {

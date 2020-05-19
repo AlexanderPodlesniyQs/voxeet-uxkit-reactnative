@@ -6,10 +6,10 @@ var _VoxeetSDK = /** @class */ (function () {
     function _VoxeetSDK() {
         this.refreshAccessTokenCallback = null;
     }
-    _VoxeetSDK.prototype.initialize = function (consumerKey, consumerSecret) {
-        return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret);
+    _VoxeetSDK.prototype.initialize = function (consumerKey, consumerSecret, options) {
+        return RNVoxeetConferencekit.initialize(consumerKey, consumerSecret, options);
     };
-    _VoxeetSDK.prototype.initializeToken = function (accessToken, refreshToken) {
+    _VoxeetSDK.prototype.initializeToken = function (accessToken, refreshToken, options) {
         var _this = this;
         if (!this.refreshAccessTokenCallback) {
             this.refreshAccessTokenCallback = function () {
@@ -24,7 +24,7 @@ var _VoxeetSDK = /** @class */ (function () {
                 _this.refreshAccessTokenCallback && _this.refreshAccessTokenCallback();
             });
         }
-        return RNVoxeetConferencekit.initializeToken(accessToken);
+        return RNVoxeetConferencekit.initializeToken(accessToken, options);
     };
     _VoxeetSDK.prototype.connect = function (userInfo) {
         return RNVoxeetConferencekit.connect(userInfo);

@@ -464,12 +464,12 @@ public class RNVoxeetConferencekitModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
-    public long waitingForParticipantsTimeout() {
-        return VoxeetSDK.conference().ConferenceConfigurations.TelecomWaitingForParticipantTimeout;
+    public int waitingForParticipantsTimeout() {
+        return (int) VoxeetSDK.conference().ConferenceConfigurations.TelecomWaitingForParticipantTimeout;
     }
 
     @ReactMethod
-    public void setWaitingForParticipantsTimeout(long timeout) {
+    public void setWaitingForParticipantsTimeout(int timeout) {
         VoxeetSDK.conference().ConferenceConfigurations.TelecomWaitingForParticipantTimeout = timeout;
     }
 

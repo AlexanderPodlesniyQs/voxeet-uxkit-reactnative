@@ -282,13 +282,11 @@ RCT_EXPORT_METHOD(defaultVideo:(BOOL)enable)
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(waitingForParticipantsTimeout)
 {
-    // ToDo: use value from VoxeetSDK.shared.conference
-    return -1;
+    return @(VoxeetSDK.shared.incomingCallTimeout);
 }
-
 RCT_EXPORT_METHOD(setWaitingForParticipantsTimeout:(long)timeout)
 {
-    // ToDo: [VoxeetSDK.shared.conference setWaitingForParticipantsTimeout:timeout];
+    VoxeetSDK.shared.incomingCallTimeout = timeout;
 }
 
 

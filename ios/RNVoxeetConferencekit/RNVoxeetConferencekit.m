@@ -44,7 +44,7 @@ RCT_EXPORT_METHOD(initialize:(NSString *)consumerKey
 }
 
 - (void)conferenceStatusWithNotification:(VTConferenceStatusNotification * _Nonnull)notification {
-    [self sendEventWithName:@"ConferenceStatusUpdatedEvent" body:notification.conferenceID];
+    [self conferenceStatusUpdatedEvent];
 }
 
 - (void)conferenceCreatedWithNotification:(VTConferenceCreatedNotification * _Nonnull)notification {
@@ -63,6 +63,12 @@ RCT_EXPORT_METHOD(initialize:(NSString *)consumerKey
      [self sendEventWithName:@"ConferenceParticipantLeft" body:notification.conferenceID];
 }
 
+- (void) conferenceStatusUpdatedEvent {
+    bool left = VoxeetSDK.shared.conference.current.status == VTConferenceStatusLeft ||
+                VoxeetSDK.shared.conference.current.status == VTConferenceStatusLeaving;
+    [self sendEventWithName:@"ConferenceStatusUpdatedEvent" body: @{@"state": left ? @"LEFT" : @"OTHER" }];
+}
+
 RCT_EXPORT_METHOD(initializeToken:(NSString *)accessToken
                   resolve:(RCTPromiseResolveBlock)resolve
                   ejecter:(RCTPromiseRejectBlock)reject)
@@ -78,7 +84,11 @@ RCT_EXPORT_METHOD(initializeToken:(NSString *)accessToken
             }
         }];
         [VoxeetUXKit.shared initialize];
-
+        VoxeetSDK.shared.notification.delegate = self;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(conferenceStatusUpdatedEvent)
+                                                     name:@"VTConferenceStateUpdated"
+                                                   object:nil];
         resolve(@(true));
     });
 }
@@ -284,6 +294,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(waitingForParticipantsTimeout)
 {
     return @(VoxeetSDK.shared.incomingCallTimeout);
 }
+
 RCT_EXPORT_METHOD(setWaitingForParticipantsTimeout:(long)timeout)
 {
     VoxeetSDK.shared.incomingCallTimeout = timeout;
@@ -311,6 +322,11 @@ RCT_EXPORT_METHOD(setWaitingForParticipantsTimeout:(long)timeout)
 - (void)stopObserving
 {
     _hasListeners = NO;
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 RCT_EXPORT_METHOD(onAccessTokenOk:(NSString *)accessToken

@@ -50,7 +50,7 @@ android {
 
 repositories {
     google()
-	maven {
+    maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url "$rootDir/../node_modules/react-native/android"
     }
@@ -63,10 +63,10 @@ dependencies {
     implementation "androidx.annotation:annotation:1.1.0"
 
     //add by default the optional firebase dependency
-    implementation ('com.voxeet.sdk:uxkit-firebase:2.3.0')
+    implementation ('com.voxeet.sdk:uxkit-firebase:2.3.1')
 
     //use the latest toolkit
-    implementation ('com.voxeet.sdk:uxkit:2.3.0') {
+    implementation ('com.voxeet.sdk:uxkit:2.3.1') {
         transitive = true
     }
 }

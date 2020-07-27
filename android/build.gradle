@@ -63,10 +63,10 @@ dependencies {
     implementation "androidx.annotation:annotation:1.1.0"
 
     //add by default the optional firebase dependency
-    implementation ('com.voxeet.sdk:uxkit-firebase:2.3.1')
+    compile ('com.voxeet.sdk:uxkit-firebase:2.4.0')
 
     //use the latest toolkit
-    implementation ('com.voxeet.sdk:uxkit:2.3.1') {
+    compile ('com.voxeet.sdk:uxkit:2.4.0') {
         transitive = true
     }
 }

@@ -129,6 +129,7 @@ public class ConferenceStatusEventEmitter extends AbstractEventEmitter {
     public void onEvent(PermissionRefusedEvent event) {
         emit(event);
     }
+
     
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(MediaResponse event) {

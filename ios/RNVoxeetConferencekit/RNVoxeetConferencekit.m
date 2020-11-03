@@ -97,15 +97,15 @@ RCT_EXPORT_METHOD(connect:(NSDictionary *)userInfo
                   resolve:(RCTPromiseResolveBlock)resolve
                   ejecter:(RCTPromiseRejectBlock)reject)
 {
+    NSString *externalID = [userInfo objectForKey:@"externalId"];
+    NSString *name = [userInfo objectForKey:@"name"];
+    NSString *avatarURL = [userInfo objectForKey:@"avatarUrl"];
+    if ([avatarURL isKindOfClass:[NSNull class]])
+        avatarURL = @"";
+    
+    VTParticipantInfo *participantInfo = [[VTParticipantInfo alloc] initWithExternalID:externalID name:name avatarURL:avatarURL];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *externalID = [userInfo objectForKey:@"externalId"];
-        NSString *name = [userInfo objectForKey:@"name"];
-        NSString *avatarURL = [userInfo objectForKey:@"avatarUrl"];
-        if ([avatarURL isKindOfClass:[NSNull class]])
-            avatarURL = @"";
-
-        VTParticipantInfo *participantInfo = [[VTParticipantInfo alloc] initWithExternalID:externalID name:name avatarURL:avatarURL];
-
         [VoxeetSDK.shared.session openWithInfo:participantInfo completion:^(NSError *error) {
             if (error != nil) {
                 reject(@"connect_error", [error localizedDescription], nil);
@@ -211,20 +211,20 @@ RCT_EXPORT_METHOD(invite:(NSString *)conferenceID
                   resolve:(RCTPromiseResolveBlock)resolve
                   ejecter:(RCTPromiseRejectBlock)reject)
 {
+    NSMutableArray<VTParticipantInfo *> *participantInfos = [[NSMutableArray alloc] init];
+
+    for (NSDictionary *participant in participants) {
+        NSString *externalID = [participant objectForKey:@"externalId"];
+        NSString *name = [participant objectForKey:@"name"];
+        NSString *avatarURL = [participant objectForKey:@"avatarUrl"];
+        if ([avatarURL isKindOfClass:[NSNull class]])
+            avatarURL = @"";
+
+        VTParticipantInfo *participantInfo = [[VTParticipantInfo alloc] initWithExternalID:externalID name:name avatarURL:avatarURL];
+        [participantInfos addObject:participantInfo];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableArray<VTParticipantInfo *> *participantInfos = [[NSMutableArray alloc] init];
-
-        for (NSDictionary *participant in participants) {
-            NSString *externalID = [participant objectForKey:@"externalId"];
-            NSString *name = [participant objectForKey:@"name"];
-            NSString *avatarURL = [participant objectForKey:@"avatarUrl"];
-            if ([avatarURL isKindOfClass:[NSNull class]])
-                avatarURL = @"";
-
-            VTParticipantInfo *participantInfo = [[VTParticipantInfo alloc] initWithExternalID:externalID name:name avatarURL:avatarURL];
-            [participantInfos addObject:participantInfo];
-        }
-
         [VoxeetSDK.shared.conference fetchWithConferenceID:conferenceID completion:^(VTConference *conference) {
             [VoxeetSDK.shared.notification inviteWithConference:conference participantInfos:participantInfos completion:^(NSError *error) {
                 if (error != nil) {
@@ -390,13 +390,12 @@ RCT_EXPORT_METHOD(startConference:(NSString *)conferenceID
                   resolve:(RCTPromiseResolveBlock)resolve
                   ejecter:(RCTPromiseRejectBlock)reject)
 {
+    NSMutableArray *userIDs = [[NSMutableArray alloc] init];
+    for (NSDictionary *participant in participants) {
+        [userIDs addObject:[participant objectForKey:@"externalId"]];
+    }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableArray *userIDs = [[NSMutableArray alloc] init];
-
-        for (NSDictionary *participant in participants) {
-            [userIDs addObject:[participant objectForKey:@"externalId"]];
-        }
-
         [VoxeetSDK.shared.conference createWithParameters:@{@"conferenceAlias": conferenceID} success:^(NSDictionary<NSString *,id> *response) {
             NSString *confID = response[@"conferenceId"];
             BOOL isNew = response[@"isNew"];
@@ -437,13 +436,13 @@ RCT_EXPORT_METHOD(openSession:(NSDictionary *)userInfo
                   resolve:(RCTPromiseResolveBlock)resolve
                   ejecter:(RCTPromiseRejectBlock)reject)
 {
+    NSString *externalID = [userInfo objectForKey:@"externalId"];
+    NSString *name = [userInfo objectForKey:@"name"];
+    NSString *avatarURL = [userInfo objectForKey:@"avatarUrl"];
+    
+    VTParticipantInfo *participantInfo = [[VTParticipantInfo alloc] initWithExternalID:externalID name:name avatarURL:avatarURL];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *externalID = [userInfo objectForKey:@"externalId"];
-        NSString *name = [userInfo objectForKey:@"name"];
-        NSString *avatarURL = [userInfo objectForKey:@"avatarUrl"];
-
-        VTParticipantInfo *participantInfo = [[VTParticipantInfo alloc] initWithExternalID:externalID name:name avatarURL:avatarURL];
-
         [VoxeetSDK.shared.session openWithInfo:participantInfo completion:^(NSError *error) {
             if (error != nil) {
                 reject(@"connect_error", [error localizedDescription], nil);
